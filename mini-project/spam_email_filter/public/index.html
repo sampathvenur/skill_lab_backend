@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Spam Email Filter</title>
+</head>
+<body>
+    <header>
+        <h1>Spam Email Filter</h1>
+        <p>By Sampath Kumar</p>
+    </header>
+    
+    <main>
+        <h2>Check for Spam</h2>
+        <textarea id="emailContent" rows="10" cols="50" placeholder="Enter your email content here..."></textarea><br>
+        <button id="checkSpamBtn">Check Spam</button>
+        <div id="result"></div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 Sampath Kumar. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('checkSpamBtn').addEventListener('click', () => {
+            const emailContent = document.getElementById('emailContent').value;
+
+            fetch('/check-spam', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ emailContent })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = data.message;
+                document.getElementById('result').style.color = data.spam ? 'red' : 'green';
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
