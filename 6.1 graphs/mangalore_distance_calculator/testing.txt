@@ -1,0 +1,24 @@
+To find the shortest path from "Mangalore" to "Sullia":
+
+http://localhost:3000/shortest-path?start=Mangalore&end=Sullia
+
+The response will be a JSON object like this:
+
+json
+{
+  "start": "Mangalore",
+  "end": "Sullia",
+  "path": ["Mangalore", "Puttur", "Sullia"]
+}
+
+
+If you query an invalid path:
+
+http://localhost:3000/shortest-path?start=Mangalore&end=Karkala
+
+The response will be:
+
+json
+{
+  "error": "No path found from Mangalore to Karkala"
+}
