@@ -1,0 +1,67 @@
+Start the Server
+
+node server.js
+
+This will start the server on http://localhost:3000.
+
+------------------------------------------------------------------
+Test the API Endpoints using Postman or curl
+
+Push a Function Call onto the Stack (POST /call):
+
+In Postman or using curl, send a POST request to http://localhost:3000/call with the body:
+
+{
+    "functionName": "myFunction"
+}
+
+Response:
+{
+    "message": "Function call 'myFunction' added to stack"
+}
+
+------------------------------------------------------------------
+
+View the Current Stack (GET /stack):
+
+Send a GET request to http://localhost:3000/stack.
+
+Response (if you previously added "myFunction"):
+{
+    "currentStack": ["myFunction"]
+}
+
+------------------------------------------------------------------
+
+Pop the Most Recent Function Call (GET /pop):
+
+Send a GET request to http://localhost:3000/pop.
+
+Response:
+{
+    "message": "Function call 'myFunction' popped from stack"
+}
+
+------------------------------------------------------------------
+
+Check the Stack After Popping (GET /stack):
+
+After popping the function, send a GET request to http://localhost:3000/stack.
+
+Response (stack should now be empty):
+{
+    "currentStack": []
+}
+
+------------------------------------------------------------------
+
+Edge Cases:
+If you try to pop from an empty stack:
+{
+    "message": "No function calls in the stack"
+}
+
+If you attempt to call the /call endpoint without a functionName:
+{
+    "error": "Function name is required"
+}

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser History & Undo/Redo Simulation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .history-container {
+            width: 48%;
+        }
+        .change-container {
+            width: 48%;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:disabled {
+            cursor: not-allowed;
+            background-color: #ccc;
+        }
+        .log {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            height: 150px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Browser History & Undo/Redo Simulation</h1>
+
+<!-- Browser History Section -->
+<div class="container">
+    <div class="history-container">
+        <h2>Browser History</h2>
+        <button onclick="simulateVisit()">Visit Page</button>
+        <button onclick="goBack()">Go Back</button>
+        <div id="historyLog" class="log"></div>
+    </div>
+
+    <!-- Undo/Redo Section -->
+    <div class="change-container">
+        <h2>Undo/Redo Functionality</h2>
+        <button onclick="addChange()">Add Change</button>
+        <button onclick="undoChange()">Undo</button>
+        <button onclick="redoChange()">Redo</button>
+        <div id="changeLog" class="log"></div>
+    </div>
+</div>
+
+<script>
+// Simulating Browser History with Stack class
+class Stack {
+    constructor() {
+        this.stack = [];
+    }
+
+    push(page) {
+        this.stack.push(page);
+        logHistory(`Visited: ${page}`);
+    }
+
+    pop() {
+        if (this.stack.length === 0) {
+            logHistory('No history to go back to.');
+            return null;
+        }
+        const lastPage = this.stack.pop();
+        logHistory(`Back to: ${lastPage}`);
+        return lastPage;
+    }
+}
+
+// Simulating Undo/Redo with UndoRedo class
+class UndoRedo {
+    constructor() {
+        this.undoStack = [];
+        this.redoStack = [];
+    }
+
+    pushChange(change) {
+        this.undoStack.push(change);
+        this.redoStack = []; // Clear redo stack when a new change is made
+        logChange(`Change added: ${change}`);
+    }
+
+    undo() {
+        if (this.undoStack.length === 0) {
+            logChange('No changes to undo.');
+            return;
+        }
+        const change = this.undoStack.pop();
+        this.redoStack.push(change);
+        logChange(`Undid change: ${change}`);
+    }
+
+    redo() {
+        if (this.redoStack.length === 0) {
+            logChange('No changes to redo.');
+            return;
+        }
+        const change = this.redoStack.pop();
+        this.undoStack.push(change);
+        logChange(`Redid change: ${change}`);
+    }
+}
+
+// Initialize classes for browser history and undo/redo
+const browserHistory = new Stack();
+const documentHistory = new UndoRedo();
+
+// Function to simulate visiting pages in browser history
+function simulateVisit() {
+    const page = prompt('Enter a page URL to visit:', 'https://example.com');
+    if (page) {
+        browserHistory.push(page);
+    }
+}
+
+// Function to go back in browser history
+function goBack() {
+    browserHistory.pop();
+}
+
+// Function to add a new change to the undo/redo history
+function addChange() {
+    const change = prompt('Enter a change:', 'Added text: "Hello World"');
+    if (change) {
+        documentHistory.pushChange(change);
+    }
+}
+
+// Function to undo the last change
+function undoChange() {
+    documentHistory.undo();
+}
+
+// Function to redo the last undone change
+function redoChange() {
+    documentHistory.redo();
+}
+
+// Function to log the browser history actions to the UI
+function logHistory(message) {
+    const historyLog = document.getElementById('historyLog');
+    const entry = document.createElement('div');
+    entry.textContent = message;
+    historyLog.appendChild(entry);
+}
+
+// Function to log the undo/redo actions to the UI
+function logChange(message) {
+    const changeLog = document.getElementById('changeLog');
+    const entry = document.createElement('div');
+    entry.textContent = message;
+    changeLog.appendChild(entry);
+}
+
+</script>
+
+</body>
+</html>
