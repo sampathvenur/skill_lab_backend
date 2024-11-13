@@ -1,0 +1,190 @@
+1. Test the /book Endpoint (Add a Booking Request)
+
+Steps:
+
+Open Postman.
+Select the POST method from the dropdown.
+Enter the following URL:
+http://localhost:3000/book
+In the Body tab, select raw and JSON format.
+Add the following JSON data in the body:
+{
+  "bookingRequest": "User1 requests auto to downtown"
+}
+Click Send.
+
+Expected Response:
+You should receive a JSON response confirming the booking addition:
+{
+    "message": "Booking added: User1 requests auto to downtown"
+}
+
+---------------------------------------------------------------------------
+
+2. Test the /queue Endpoint (View the Current Queue)
+
+Steps:
+
+In Postman, select the GET method.
+Enter the following URL:
+http://localhost:3000/queue
+Click Send.
+
+Expected Response:
+The response will be a JSON object containing the current queue:
+{
+    "queue": ["User1 requests auto to downtown"]
+}
+
+If you have added multiple booking requests, the queue will contain all of them:
+{
+    "queue": ["User1 requests auto to downtown", "User2 requests auto to airport"]
+}
+
+---------------------------------------------------------------------------
+
+3. Test the /processBooking Endpoint (Process a Booking Request)
+
+Steps:
+In Postman, select the POST method.
+Enter the following URL:
+http://localhost:3000/processBooking
+Click Send.
+
+Expected Response:
+If there is a booking request in the queue, you should receive a response like:
+{
+    "message": "Processed booking: User1 requests auto to downtown"
+}
+
+If the queue is empty, the response will indicate there are no bookings to process:
+{
+    "message": "No bookings to process"
+}
+
+---------------------------------------------------------------------------
+
+4. Test the /queue Endpoint Again (Verify the Queue After Processing)
+
+Steps:
+In Postman, select the GET method.
+Enter the following URL:
+http://localhost:3000/queue
+Click Send.
+
+Expected Response:
+After processing the booking request, the queue will be updated to remove the oldest request. For example:
+{
+    "queue": []
+}
+
+If there are additional requests in the queue, they will remain:
+{
+    "queue": ["User2 requests auto to airport"]
+}
+
+---------------------------------------------------------------------------
+
+5. Test Adding More Booking Requests
+
+Steps:
+In Postman, select the POST method.
+Enter the URL:
+http://localhost:3000/book
+Add the following JSON body (for additional booking requests):
+{
+  "bookingRequest": "User2 requests auto to airport"
+}
+Click Send.
+Add another booking request in the same way:
+{
+  "bookingRequest": "User3 requests auto to city center"
+}
+
+---------------------------------------------------------------------------
+
+6. Complete Example in Postman
+
+POST /book: Add 3 booking requests to the queue.
+
+Request Body for User1:
+{
+  "bookingRequest": "User1 requests auto to downtown"
+}
+Request Body for User2:
+{
+  "bookingRequest": "User2 requests auto to airport"
+}
+Request Body for User3:
+{
+  "bookingRequest": "User3 requests auto to city center"
+}
+GET /queue: View the current queue.
+
+Expected Response:
+{
+    "queue": [
+        "User1 requests auto to downtown",
+        "User2 requests auto to airport",
+        "User3 requests auto to city center"
+    ]
+}
+POST /processBooking: Process the oldest booking request.
+
+Expected Response:
+{
+    "message": "Processed booking: User1 requests auto to downtown"
+}
+GET /queue: View the updated queue after processing one booking.
+
+Expected Response:
+{
+    "queue": [
+        "User2 requests auto to airport",
+        "User3 requests auto to city center"
+    ]
+}
+POST /processBooking: Process the second booking.
+
+Expected Response:
+{
+    "message": "Processed booking: User2 requests auto to airport"
+}
+GET /queue: View the updated queue after processing the second booking.
+
+Expected Response:
+{
+    "queue": [
+        "User3 requests auto to city center"
+    ]
+}
+POST /processBooking: Process the third booking.
+
+Expected Response:
+{
+    "message": "Processed booking: User3 requests auto to city center"
+}
+GET /queue: View the empty queue after processing all bookings.
+
+Expected Response:
+{
+    "queue": []
+}
+
+---------------------------------------------------------------------------
+
+Summary of API Requests in Postman
+
+POST /book: Add a booking request to the queue.
+
+Request Body: { "bookingRequest": "Booking details" }
+Method: POST
+URL: http://localhost:3000/book
+GET /queue: View the current queue.
+
+Method: GET
+URL: http://localhost:3000/queue
+POST /processBooking: Process the oldest booking request.
+
+Method: POST
+URL: http://localhost:3000/processBooking
