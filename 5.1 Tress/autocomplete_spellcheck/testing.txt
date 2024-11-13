@@ -1,0 +1,35 @@
+Add a word to the Trie
+
+http://localhost:3000/add-word?word=hello
+
+This should add the word "hello" to the Trie. You should see a response like:
+
+{
+    "message": "Word \"hello\" added to dictionary"
+}
+
+-------------------------------------------------------------------------------
+Check if a word exists in the Trie
+
+http://localhost:3000/spell-check?word=hello
+
+If the word is found, the response will be:
+
+{
+    "word": "hello",
+    "exists": true
+}
+If the word does not exist, it will return false.
+
+
+-------------------------------------------------------------------------------
+Get autocomplete suggestions
+
+http://localhost:3000/autocomplete?prefix=he
+
+If there are any suggestions that start with "he", you'll see a response like:
+
+{
+    "prefix": "he",
+    "suggestions": ["hello", "hell"]
+}

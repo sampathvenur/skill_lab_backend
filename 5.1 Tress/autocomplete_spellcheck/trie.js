@@ -1,3 +1,4 @@
+// trie.js
 class TrieNode {
     constructor() {
         this.children = {};
